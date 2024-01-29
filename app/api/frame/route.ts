@@ -9,12 +9,11 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   } catch (err) {
     console.error(err);
   }
-
+  let random = Math.random().toString();
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${process.env.DOMAIN}/park-2.png" />
-    <meta property="fc:frame:button:1" content="${accountAddress}" />
-    <meta property="fc:frame:post_url" content="${process.env.DOMAIN}/api/frame" />
+    <meta property="fc:frame:button:1" content="${random}" />
+    <meta property="fc:frame:post_url" content="https://test-frame-mint.vercel.app/api/frame" />
   </head></html>`);
 }
 
