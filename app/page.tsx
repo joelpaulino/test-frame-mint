@@ -3,17 +3,17 @@ import type { Metadata } from 'next';
 
 const frameMetadata = getFrameMetadata({
   buttons: ['Next image'],
-  image: 'https://zizzamia.xyz/park-1.png',
-  post_url: 'https://zizzamia.xyz/api/frame',
+  image: `${process.env.DOMAIN}/park-1.png`,
+  post_url: `${process.env.DOMAIN}/api/frame`,
 });
 
 export const metadata: Metadata = {
-  title: 'zizzamia.xyz',
+  title: 'Test Frame Mint',
   description: 'LFG',
   openGraph: {
-    title: 'zizzamia.xyz',
+    title: 'Test Frame Mint',
     description: 'LFG',
-    images: ['https://zizzamia.xyz/park-1.png'],
+    images: [`${process.env.DOMAIN}/park-1.png`],
   },
   other: {
     ...frameMetadata,
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <h1>zizzamia.xyz</h1>
+      <h1>{process.env.DOMAIN}</h1>
     </>
   );
 }
