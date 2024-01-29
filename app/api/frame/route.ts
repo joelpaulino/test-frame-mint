@@ -9,6 +9,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   } catch (err) {
     console.error(err);
   }
+  console.log(accountAddress);
+
   let random = Math.random().toString();
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
