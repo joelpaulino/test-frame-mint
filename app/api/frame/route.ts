@@ -71,7 +71,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
     <meta property="og:image" content=${md.image}/>
-    <meta property="fc:frame:button:1" content="Cannot Mint - Try Viewing On Wallet" />
+    <meta property="fc:frame:button:1" content="Cant Drop! Try Wallet" />
     <meta property="fc:frame:post_url" content="https://test-frame-mint.vercel.app/api/frame" />
     <meta property="cb:tx" content="to:0x6F45df69821667E38CBc5A249ABa11df12c73645,data:${encoded},value:${priceEther}" />
   </head></html>`);
