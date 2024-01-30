@@ -5,10 +5,10 @@ import { Wallet, ethers } from 'ethers';
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   const w = Wallet.createRandom();
-  const data = req.nextUrl.searchParams.get('data');
-  const sdata = data?.split('_');
-  const contractAddress = sdata?.[0];
-  const tokenId = parseInt(sdata?.[1] as string | '0', 10);
+  // const data = req.nextUrl.searchParams.get('data');
+  // const sdata = data?.split('_');
+  const contractAddress = `0x6F45df69821667E38CBc5A249ABa11df12c73645`; //sdata?.[0];
+  const tokenId = 0; //parseInt(sdata?.[1] as string | '0', 10);
 
   console.log('get address');
 
@@ -61,12 +61,14 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   if (accountAddress === undefined) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />  
+    <meta property="fc:frame:image" content="${md.image}"/>
     <meta property="fc:frame:button:1" content="Need Address To Pop" />
   </head></html>`);
   }
   let random = Math.random().toString();
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
+    <meta property="fc:frame:image" content="${md.image}"/>
     <meta property="fc:frame:button:1" content="!!!Cant Drop ${accountAddress}!!!" />
     <meta property="cb:tx" content="to:${contractAddress},data:${encoded},value:${priceEther}" />
   </head></html>`);

@@ -16,8 +16,8 @@ export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const contractAddress = searchParams.contractAddress as string;
-  const tokenId = parseInt(searchParams.tokenId as string);
+  const contractAddress = `0x6F45df69821667E38CBc5A249ABa11df12c73645`; //searchParams.contractAddress as string;
+  const tokenId = 0; //parseInt(searchParams.tokenId as string);
 
   let sdk = ThirdwebSDK.fromSigner(w, 'base', {
     secretKey: process.env.THIRDWEB_SECRET_KEY,
@@ -29,7 +29,7 @@ export async function generateMetadata(
   const frameMetadata = getFrameMetadata({
     buttons: [`Mint ${md.name}`],
     image: `${md.image}`,
-    post_url: `https://test-frame-mint.vercel.app/api/frame?data=${contractAddress}_${tokenId}`,
+    post_url: `https://test-frame-mint.vercel.app/api/frame`,
   });
 
   const _metadata: Metadata = {
