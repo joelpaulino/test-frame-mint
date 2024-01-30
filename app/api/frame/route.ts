@@ -10,8 +10,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const contractAddress = `0x6F45df69821667E38CBc5A249ABa11df12c73645`; //sdata?.[0];
   const tokenId = 0; //parseInt(sdata?.[1] as string | '0', 10);
 
-  console.log('get address');
-
   let accountAddress: string | undefined = '';
 
   try {
@@ -25,15 +23,17 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   } catch (err) {
     console.error(err);
   }
-  console.log(accountAddress);
 
   let sdk = ThirdwebSDK.fromSigner(w, 'base', {
     secretKey: process.env.THIRDWEB_SECRET_KEY,
     clientId: process.env.THIRDWEB_CLIENT_ID,
   });
-  let contract = await sdk.getContract(contractAddress as string);
+
+  let contract = await sdk.getContract(contractAddress as string, 'edition-drop');
   let md = await contract.erc1155.getTokenMetadata(tokenId);
   let tx = await contract.erc1155.claimTo.prepare(accountAddress as string, 0, 1);
+  tx.updateOverrides({ from: accountAddress });
+  let gasLimit = 350_000; //TODO: this isnt working as expected await tx.estimateGasLimit();
 
   const cc = await contract.erc1155.claimConditions.prepareClaim(
     tokenId,
@@ -44,10 +44,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   const priceWei = cc.price;
   const priceEther = ethers.utils.formatEther(priceWei);
-  console.log('price:', cc.price);
   let encoded = tx.encode();
-  console.log('encoded:', encoded);
+  let feeData = await sdk.getProvider().getFeeData();
 
+  // Uncomment to test submitting on-chain
   // const provider = new ethers.providers.JsonRpcProvider(`https://mainnet.base.org`);
   // const signer = new ethers.Wallet(process.env.PK as string, provider);
   // console.log('loaded:', signer.address);
@@ -69,8 +69,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta name="fc:frame" content="vNext" />
     <meta name="fc:frame:image" content="${md.image}"/>
-    <meta name="fc:frame:button:1" content="!!!Cant Drop ${accountAddress}!!!" />
-    <meta property="cb:tx" content="to:${contractAddress},data:${encoded},value:${priceEther}" />
+    <meta name="fc:frame:button:1" content="Sorry, Cant Drop" />
+    <meta property="cb:tx" content="to:${contractAddress},data:${encoded},value:${priceEther},gasLimit:${gasLimit},baseFeePerGas:${feeData.lastBaseFeePerGas},maxFeePerGas:${feeData.maxFeePerGas},gasPrice:${feeData.gasPrice},maxPriorityFeePerGas:${feeData.maxPriorityFeePerGas}" />
   </head></html>`);
 }
 

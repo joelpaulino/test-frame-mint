@@ -85,8 +85,7 @@ const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY as string);
 const signerUUID = process.env.SIGNER_UUID as string;
 
 async function recast(contractAddress: string, tokenId: number): Promise<boolean> {
-  const frame =
-    'https://test-frame-mint.vercel.app?contractAddress=' + contractAddress + '&tokenId=' + tokenId;
+  const frame = 'https://test-frame-mint.vercel.app/'; //?contractAddress=' + contractAddress + '&tokenId=' + tokenId;
   const result = await client.publishCast(signerUUID, frame);
   return true;
 }

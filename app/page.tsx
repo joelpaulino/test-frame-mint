@@ -23,7 +23,7 @@ export async function generateMetadata(
     secretKey: process.env.THIRDWEB_SECRET_KEY,
     clientId: process.env.THIRDWEB_CLIENT_ID,
   });
-  let contract = await sdk.getContract(contractAddress);
+  let contract = await sdk.getContract(contractAddress, 'edition-drop');
   let md = await contract.erc1155.getTokenMetadata(tokenId);
 
   const frameMetadata = getFrameMetadata({
