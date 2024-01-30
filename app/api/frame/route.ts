@@ -25,12 +25,18 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   //   data: tx.encode(),
   // });
   // console.log(txx);
-
   console.log('get address');
+
   let accountAddress: string | undefined = '';
+
   try {
-    const body: { trustedData?: { messageBytes?: string } } = await req.json();
-    accountAddress = await getFrameAccountAddress(body, { NEYNAR_API_KEY: 'NEYNAR_API_DOCS' });
+    const body = await req.json();
+    if (body.hasOwnProperty('address')) {
+      accountAddress = body.address as string;
+    } else {
+      let fcBody: { trustedData?: { messageBytes?: string } } = body;
+      accountAddress = await getFrameAccountAddress(fcBody, { NEYNAR_API_KEY: 'NEYNAR_API_DOCS' });
+    }
   } catch (err) {
     console.error(err);
   }
@@ -41,13 +47,19 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   let contract = await sdk.getContract('0x6F45df69821667E38CBc5A249ABa11df12c73645');
   let tx = await contract.erc1155.claimTo.prepare(accountAddress as string, 0, 1);
   let encoded = tx.encode();
-
+  console.log('encoded:', encoded);
+  if (accountAddress === undefined) {
+    return new NextResponse(`<!DOCTYPE html><html><head>
+    <meta property="fc:frame" content="vNext" />
+    <meta property="fc:frame:button:1" content="Need Address To Mint" />
+  </head></html>`);
+  }
   let random = Math.random().toString();
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:button:1" content="${random}" />
+    <meta property="fc:frame:button:1" content="Cannot Mint - Try Viewing On Wallet" />
     <meta property="fc:frame:post_url" content="https://test-frame-mint.vercel.app/api/frame" />
-    <meta property="cb:tx" content="to:0x6F45df69821667E38CBc5A249ABa11df12c73645,data:${encoded}" />
+    <meta property="cb:tx" content="to:0x6F45df69821667E38CBc5A249ABa11df12c73645,data:${encoded},value:0.0001" />
   </head></html>`);
 }
 
