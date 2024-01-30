@@ -43,7 +43,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   console.log(accountAddress);
 
   //sdk.updateSignerOrProvider(w);
-  let sdk = ThirdwebSDK.fromSigner(w, 'base', { secretKey: process.env.THIRDWEB_SECRET_KEY });
+  let sdk = ThirdwebSDK.fromSigner(w, 'base', {
+    secretKey: process.env.THIRDWEB_SECRET_KEY,
+    clientId: process.env.THIRDWEB_CLIENT_ID,
+  });
   let contract = await sdk.getContract('0x6F45df69821667E38CBc5A249ABa11df12c73645');
   let md = await contract.erc1155.getTokenMetadata(0);
   let tx = await contract.erc1155.claimTo.prepare(accountAddress as string, 0, 1);
