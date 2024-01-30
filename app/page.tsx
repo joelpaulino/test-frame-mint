@@ -27,7 +27,7 @@ export async function generateMetadata(
   let md = await contract.erc1155.getTokenMetadata(tokenId);
 
   const frameMetadata = getFrameMetadata({
-    buttons: ['Next image'],
+    buttons: [`Mint ${md.name}`],
     image: `${md.image}`,
     post_url: `https://test-frame-mint.vercel.app/api/frame?data=${contractAddress}_${tokenId}`,
   });
