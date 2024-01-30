@@ -30,22 +30,21 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   });
 
   let contract = await sdk.getContract(contractAddress as string, 'edition-drop');
-  let md = await contract.erc1155.getTokenMetadata(tokenId);
-  let tx = await contract.erc1155.claimTo.prepare(accountAddress as string, 0, 1);
-  tx.updateOverrides({ from: accountAddress });
-  let gasLimit = 350_000; //TODO: this isnt working as expected await tx.estimateGasLimit();
-
-  const cc = await contract.erc1155.claimConditions.prepareClaim(
+  let txP = await contract.erc1155.claimTo.prepare(accountAddress as string, 0, 1);
+  let mdP = await contract.erc1155.getTokenMetadata(tokenId);
+  const ccP = await contract.erc1155.claimConditions.prepareClaim(
     tokenId,
     1,
     false,
     accountAddress as string,
   );
-
+  const feeDataP = sdk.getProvider().getFeeData();
+  const [md, tx, cc, feeData] = await Promise.all([mdP, txP, ccP, feeDataP]);
   const priceWei = cc.price;
+  // tx.updateOverrides({ from: accountAddress });
+  let gasLimit = 350_000; //TODO: this isnt working as expected await tx.estimateGasLimit();
   const priceEther = ethers.utils.formatEther(priceWei);
   let encoded = tx.encode();
-  let feeData = await sdk.getProvider().getFeeData();
 
   // Uncomment to test submitting on-chain
   // const provider = new ethers.providers.JsonRpcProvider(`https://mainnet.base.org`);
