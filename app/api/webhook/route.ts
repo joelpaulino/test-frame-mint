@@ -84,7 +84,7 @@ const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY as string);
 // https://docs.neynar.com/docs/write-to-farcaster-with-neynar-managed-signers
 const signerUUID = process.env.SIGNER_UUID as string;
 
-export async function recast(contractAddress: string, tokenId: number): Promise<boolean> {
+async function recast(contractAddress: string, tokenId: number): Promise<boolean> {
   const frame =
     'https://test-frame-mint.vercel.app?contractAddress=' + contractAddress + '&tokenId=' + tokenId;
   const result = await client.publishCast(signerUUID, frame);
