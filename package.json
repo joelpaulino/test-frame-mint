@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "@coinbase/onchainkit": "^0.1.6",
+    "@neynar/nodejs-sdk": "^1.8.0",
     "@thirdweb-dev/sdk": "^4.0.28",
     "bufferutil": "^4.0.8",
     "ethers": "^5",
