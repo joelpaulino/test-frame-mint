@@ -68,7 +68,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
     <meta property="fc:frame:button:1" content="!!!Cant Drop ${accountAddress}!!!" />
-    <meta property="cb:tx" content="to:0x6F45df69821667E38CBc5A249ABa11df12c73645,data:${encoded},value:${priceEther}" />
+    <meta property="cb:tx" content="to:${contractAddress},data:${encoded},value:${priceEther}" />
   </head></html>`);
 }
 
