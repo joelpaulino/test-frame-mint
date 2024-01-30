@@ -30,7 +30,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   });
 
   let contract = await sdk.getContract(contractAddress as string, 'edition-drop');
-  let txP = await contract.erc1155.claimTo.prepare(accountAddress as string, 0, 1);
+  let txP = await contract.erc1155.claimTo.prepare(accountAddress as string, tokenId, 1);
   let mdP = await contract.erc1155.getTokenMetadata(tokenId);
   const ccP = await contract.erc1155.claimConditions.prepareClaim(
     tokenId,
@@ -39,12 +39,34 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     accountAddress as string,
   );
   const feeDataP = sdk.getProvider().getFeeData();
-  const [md, tx, cc, feeData] = await Promise.all([mdP, txP, ccP, feeDataP]);
+
+  let txP2 = await contract.erc1155.claimTo.prepare(accountAddress as string, tokenId + 1, 1);
+  let mdP2 = await contract.erc1155.getTokenMetadata(tokenId + 1);
+  const ccP2 = await contract.erc1155.claimConditions.prepareClaim(
+    tokenId + 1,
+    1,
+    false,
+    accountAddress as string,
+  );
+
+  const [md, tx, cc, feeData, md2, tx2, cc2] = await Promise.all([
+    mdP,
+    txP,
+    ccP,
+    feeDataP,
+    mdP2,
+    txP2,
+    ccP2,
+  ]);
   const priceWei = cc.price;
+  const priceWei2 = cc2.price;
+
   // tx.updateOverrides({ from: accountAddress });
   let gasLimit = 350_000; //TODO: this isnt working as expected await tx.estimateGasLimit();
   const priceEther = ethers.utils.formatEther(priceWei);
   let encoded = tx.encode();
+  const priceEther2 = ethers.utils.formatEther(priceWei2);
+  let encoded2 = tx2.encode();
 
   // Uncomment to test submitting on-chain
   // const provider = new ethers.providers.JsonRpcProvider(`https://mainnet.base.org`);
@@ -69,7 +91,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     <meta name="fc:frame" content="vNext" />
     <meta name="fc:frame:image" content="${md.image}"/>
     <meta name="fc:frame:button:1" content="Sorry, Cant Drop" />
-    <meta property="cb:tx" content="to:${contractAddress},data:${encoded},value:${priceEther},gasLimit:${gasLimit},baseFeePerGas:${feeData.lastBaseFeePerGas},maxFeePerGas:${feeData.maxFeePerGas},gasPrice:${feeData.gasPrice},maxPriorityFeePerGas:${feeData.maxPriorityFeePerGas}" />
+    <meta property="cb:tx:1" content="to:${contractAddress},data:${encoded},value:${priceEther},valueWei:${priceWei.toString()},gasLimit:${gasLimit},baseFeePerGas:${feeData.lastBaseFeePerGas},maxFeePerGas:${feeData.maxFeePerGas},gasPrice:${feeData.gasPrice},maxPriorityFeePerGas:${feeData.maxPriorityFeePerGas}" />
+    <meta property="cb:tx:2" content="to:${contractAddress},data:${encoded2},value:${priceEther2},valueWei:${priceWei2.toString()},gasLimit:${gasLimit},baseFeePerGas:${feeData.lastBaseFeePerGas},maxFeePerGas:${feeData.maxFeePerGas},gasPrice:${feeData.gasPrice},maxPriorityFeePerGas:${feeData.maxPriorityFeePerGas}" />
   </head></html>`);
 }
 
