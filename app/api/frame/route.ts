@@ -60,16 +60,16 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
   if (accountAddress === undefined) {
     return new NextResponse(`<!DOCTYPE html><html><head>
-    <meta property="fc:frame" content="vNext" />  
-    <meta property="fc:frame:image" content="${md.image}"/>
-    <meta property="fc:frame:button:1" content="Need Address To Pop" />
+    <meta name="fc:frame" content="vNext" />  
+    <meta name="fc:frame:image" content="${md.image}"/>
+    <meta name="fc:frame:button:1" content="Need Address To Pop" />
   </head></html>`);
   }
   let random = Math.random().toString();
   return new NextResponse(`<!DOCTYPE html><html><head>
-    <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${md.image}"/>
-    <meta property="fc:frame:button:1" content="!!!Cant Drop ${accountAddress}!!!" />
+    <meta name="fc:frame" content="vNext" />
+    <meta name="fc:frame:image" content="${md.image}"/>
+    <meta name="fc:frame:button:1" content="!!!Cant Drop ${accountAddress}!!!" />
     <meta property="cb:tx" content="to:${contractAddress},data:${encoded},value:${priceEther}" />
   </head></html>`);
 }
