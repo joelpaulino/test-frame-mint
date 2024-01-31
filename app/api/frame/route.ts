@@ -37,22 +37,12 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   console.log('prepare:', new Date().toISOString());
   let txP = contract.erc1155.claimTo.prepare(accountAddress as string, tokenId, 1);
   let mdP = contract.erc1155.getTokenMetadata(tokenId);
-  const ccP = contract.erc1155.claimConditions.prepareClaim(
-    tokenId,
-    1,
-    false,
-    accountAddress as string,
-  );
+  const ccP = contract.erc1155.claimConditions.getActive(tokenId);
   const feeDataP = sdk.getProvider().getFeeData();
 
   let txP2 = contract.erc1155.claimTo.prepare(accountAddress as string, tokenId + 1, 1);
   let mdP2 = contract.erc1155.getTokenMetadata(tokenId + 1);
-  const ccP2 = contract.erc1155.claimConditions.prepareClaim(
-    tokenId + 1,
-    1,
-    false,
-    accountAddress as string,
-  );
+  const ccP2 = contract.erc1155.claimConditions.getActive(tokenId);
 
   const [md, tx, cc, feeData, md2, tx2, cc2] = await Promise.all([
     mdP,
