@@ -35,9 +35,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     contract.erc1155.balanceOf(accountAddress as string, tokenId + 1),
   ]);
   console.log('prepare:', new Date().toISOString());
-  let txP = await contract.erc1155.claimTo.prepare(accountAddress as string, tokenId, 1);
-  let mdP = await contract.erc1155.getTokenMetadata(tokenId);
-  const ccP = await contract.erc1155.claimConditions.prepareClaim(
+  let txP = contract.erc1155.claimTo.prepare(accountAddress as string, tokenId, 1);
+  let mdP = contract.erc1155.getTokenMetadata(tokenId);
+  const ccP = contract.erc1155.claimConditions.prepareClaim(
     tokenId,
     1,
     false,
@@ -45,9 +45,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   );
   const feeDataP = sdk.getProvider().getFeeData();
 
-  let txP2 = await contract.erc1155.claimTo.prepare(accountAddress as string, tokenId + 1, 1);
-  let mdP2 = await contract.erc1155.getTokenMetadata(tokenId + 1);
-  const ccP2 = await contract.erc1155.claimConditions.prepareClaim(
+  let txP2 = contract.erc1155.claimTo.prepare(accountAddress as string, tokenId + 1, 1);
+  let mdP2 = contract.erc1155.getTokenMetadata(tokenId + 1);
+  const ccP2 = contract.erc1155.claimConditions.prepareClaim(
     tokenId + 1,
     1,
     false,
