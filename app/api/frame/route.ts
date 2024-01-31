@@ -23,13 +23,18 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   } catch (err) {
     console.error(err);
   }
-
+  console.log('init twd:', new Date().toISOString());
   let sdk = ThirdwebSDK.fromSigner(w, 'base', {
     secretKey: process.env.THIRDWEB_SECRET_KEY,
     clientId: process.env.THIRDWEB_CLIENT_ID,
   });
-
+  console.log('init contract:', new Date().toISOString());
   let contract = await sdk.getContract(contractAddress as string, 'edition-drop');
+  const [token0, token1] = await Promise.all([
+    contract.erc1155.balanceOf(accountAddress as string, tokenId),
+    contract.erc1155.balanceOf(accountAddress as string, tokenId + 1),
+  ]);
+  console.log('prepare:', new Date().toISOString());
   let txP = await contract.erc1155.claimTo.prepare(accountAddress as string, tokenId, 1);
   let mdP = await contract.erc1155.getTokenMetadata(tokenId);
   const ccP = await contract.erc1155.claimConditions.prepareClaim(
@@ -58,6 +63,21 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     txP2,
     ccP2,
   ]);
+  console.log('done contract:', new Date().toISOString());
+
+  if (token0.gt(0)) {
+    return new NextResponse(`<!DOCTYPE html><html><head>
+    <meta name="fc:frame" content="vNext" />  
+    <meta name="fc:frame:image" content="${md.image}"/>
+    <meta name="fc:frame:button:1" content="Claimed" />
+  </head></html>`);
+  }
+  if (token1.gt(0)) {
+    return new NextResponse(`<!DOCTYPE html><html><head>
+    <meta name="fc:frame" content="vNext" />  
+    <meta name="fc:frame:image" content="${md2.image}"/>
+    <meta name="fc:frame:button:1" content="Claimed" />`);
+  }
   const priceWei = cc.price;
   const priceWei2 = cc2.price;
 
