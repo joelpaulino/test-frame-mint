@@ -244,15 +244,15 @@ export async function POST(
 
   if (balanceOf1.gt(0)) {
     return new NextResponse(`<!DOCTYPE html><html><head>
-    <meta property="fc:frame" content="vNext" />
-    <meta property="og:image" content="${TokenMetaData[1].gatewayImage}"/>
+    <meta name="fc:frame" content="vNext" />
+    <meta name="fc:frame:image" content="${TokenMetaData[1].gatewayImage}"/>
     <meta property="fc:frame:button:1" content="Already Minted" />
   </head></html>`);
   }
   if (balanceOf2.gt(0)) {
     return new NextResponse(`<!DOCTYPE html><html><head>
-    <meta property="fc:frame" content="vNext" />
-    <meta property="og:image" content="${TokenMetaData[2].gatewayImage}"/>
+    <meta name="fc:frame" content="vNext" />
+    <meta name="fc:frame:image" content="${TokenMetaData[2].gatewayImage}"/>
     <meta property="fc:frame:button:1" content="Already Minted" />
   </head></html>`);
   }
