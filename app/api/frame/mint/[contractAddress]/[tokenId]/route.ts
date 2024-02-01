@@ -206,6 +206,7 @@ export async function POST(
   { params }: { params: { contractAddress: string; tokenId: string } },
 ): Promise<Response> {
   const body = await req.json();
+  console.log('body:', body);
   const userAddress = await getUserAddress(body);
 
   if (!userAddress) {
