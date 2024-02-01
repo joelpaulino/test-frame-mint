@@ -203,16 +203,17 @@ const ABI = [
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { contractAddress: string; tokenId: string } },
+  { params }: { params: { contractAddress: string } },
 ): Promise<Response> {
   const body = await req.json();
+
   console.log('body:', body);
   const userAddress = await getUserAddress(body);
-
+  const tokenId = await getButtonIndex(body);
   if (!userAddress) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
-    <meta property="og:image" content=${TokenMetaData[parseInt(params.tokenId)].gatewayImage}/>
+    <meta property="og:image" content=${TokenMetaData[parseInt(tokenId)].gatewayImage}/>
     <meta property="fc:frame:button:1" content="No Address Found" />
   </head></html>`);
   }
@@ -233,15 +234,15 @@ export async function POST(
     pricePerToken,
     currency,
     metadata,
-  ] = await nft.getClaimConditionById(params.tokenId, 0);
+  ] = await nft.getClaimConditionById(tokenId, 0);
 
-  const [balanceOf]: ethers.BigNumber[] = await nft.balanceOfBatch([userAddress], [params.tokenId]);
+  const [balanceOf]: ethers.BigNumber[] = await nft.balanceOfBatch([userAddress], [tokenId]);
   console.log('balanceOf:', balanceOf);
 
   if (balanceOf.gt(10)) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
-    <meta property="og:image" content="${TokenMetaData[parseInt(params.tokenId)].gatewayImage}"/>
+    <meta property="og:image" content="${TokenMetaData[parseInt(tokenId)].gatewayImage}"/>
     <meta property="fc:frame:button:1" content="Already Dropped" />
   </head></html>`);
   }
@@ -250,7 +251,7 @@ export async function POST(
   //Note: this only works because there is no allowlist and merkleRoot is 0
   const tx = await nft.populateTransaction.claim(
     userAddress,
-    params.tokenId,
+    tokenId,
     1,
     currency,
     pricePerToken,
@@ -279,8 +280,8 @@ export async function POST(
 
   return new NextResponse(`<!DOCTYPE html><html><head>
   <meta name="fc:frame" content="vNext" />
-  <meta name="fc:frame:image" content="${TokenMetaData[parseInt(params.tokenId)].gatewayImage}"/>
-  <meta property="cb:tx:${params.tokenId}" content="to:${params.contractAddress},data:${tx.data},value:${value},valueWei:${pricePerToken},gasLimit:${gasLimit},baseFeePerGas:${feeData.lastBaseFeePerGas},maxFeePerGas:${feeData.maxFeePerGas},gasPrice:${feeData.gasPrice},maxPriorityFeePerGas:${feeData.maxPriorityFeePerGas}" />
+  <meta name="fc:frame:image" content="${TokenMetaData[parseInt(tokenId)].gatewayImage}"/>
+  <meta property="cb:tx:${tokenId}" content="to:${params.contractAddress},data:${tx.data},value:${value},valueWei:${pricePerToken},gasLimit:${gasLimit},baseFeePerGas:${feeData.lastBaseFeePerGas},maxFeePerGas:${feeData.maxFeePerGas},gasPrice:${feeData.gasPrice},maxPriorityFeePerGas:${feeData.maxPriorityFeePerGas}" />
   
 </head></html>`);
 }
@@ -305,6 +306,13 @@ async function getUserAddress(body: any): Promise<string | undefined> {
   return accountAddress;
 }
 
+async function getButtonIndex(body: any): Promise<string> {
+  if (body.hasOwnProperty('buttonIndex')) {
+    return body.buttonIndex as string;
+  } else {
+    return body.data.body.button_index;
+  }
+}
 /*
  claim(
     "0xA14A25930BaBC1220df002070be86b030B1d4c68",
