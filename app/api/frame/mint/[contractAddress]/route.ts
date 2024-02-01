@@ -1,4 +1,4 @@
-import { getFrameAccountAddress } from '@coinbase/onchainkit';
+import { getFrameAccountAddress, getFrameValidatedMessage } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
 import { ThirdwebSDK } from '@thirdweb-dev/sdk';
 import { Wallet, ethers } from 'ethers';
@@ -306,11 +306,28 @@ async function getUserAddress(body: any): Promise<string | undefined> {
   return accountAddress;
 }
 
+/*
+body: {
+  untrustedData: {
+    fid: 238505,
+    url: 'https://test-frame-mint.vercel.app',
+    messageHash: '0xe5dd0d6b7923bc5fe26c630f139437b57f66c7f3',
+    timestamp: 1706769135000,
+    network: 1,
+    buttonIndex: 2,
+    castId: { fid: 238505, hash: '0xe141219f70a05343277077d8a0820af00888acb1' }
+  },
+  trustedData: {
+    messageBytes: '0a52080d10a9c70e18efa9b32e20018201420a2268747470733a2f2f746573742d6672616d652d6d696e742e76657263656c2e61707010021a1a08a9c70e1214e141219f70a05343277077d8a0820af00888acb11214e5dd0d6b7923bc5fe26c630f139437b57f66c7f3180122402f795dbe8f4dc4e6fca0f0be954ba82e2c5945a010b0888a6ad6dc74388043e25a44acfd528ad06b8d8c340e1c8e0a9a80e9b14a42c0aa1aeb258e4c0788c00828013220bbef8ee0fb1c365596b880642aa2d53582f1ca36b9352ea741659d2de07826c9'
+  }
+}
+*/
 async function getButtonIndex(body: any): Promise<string> {
   if (body.hasOwnProperty('buttonIndex')) {
     return body.buttonIndex as string;
   } else {
-    return body.data.body.button_index;
+    const msg = await getFrameValidatedMessage(body);
+    return msg?.data?.frameActionBody?.buttonIndex.toString() as string;
   }
 }
 /*
