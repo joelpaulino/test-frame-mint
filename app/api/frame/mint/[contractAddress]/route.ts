@@ -239,7 +239,7 @@ export async function POST(
   const [balanceOf]: ethers.BigNumber[] = await nft.balanceOfBatch([userAddress], [tokenId]);
   console.log('balanceOf:', balanceOf);
 
-  if (balanceOf.gt(10)) {
+  if (balanceOf.gt(0)) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
     <meta property="og:image" content="${TokenMetaData[parseInt(tokenId)].gatewayImage}"/>
