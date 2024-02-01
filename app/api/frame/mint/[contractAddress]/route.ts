@@ -236,14 +236,24 @@ export async function POST(
     metadata,
   ] = await nft.getClaimConditionById(tokenId, 0);
 
-  const [balanceOf]: ethers.BigNumber[] = await nft.balanceOfBatch([userAddress], [tokenId]);
-  console.log('balanceOf:', balanceOf);
+  const [balanceOf1, balanceOf2]: ethers.BigNumber[] = await nft.balanceOfBatch(
+    [userAddress, userAddress],
+    [1, 2],
+  );
+  console.log('balanceOf1:', balanceOf1, 'balanceOf2:', balanceOf2);
 
-  if (balanceOf.gt(0)) {
+  if (balanceOf1.gt(0)) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
-    <meta property="og:image" content="${TokenMetaData[parseInt(tokenId)].gatewayImage}"/>
-    <meta property="fc:frame:button:1" content="Already Dropped" />
+    <meta property="og:image" content="${TokenMetaData[1].gatewayImage}"/>
+    <meta property="fc:frame:button:1" content="Already Minted" />
+  </head></html>`);
+  }
+  if (balanceOf2.gt(0)) {
+    return new NextResponse(`<!DOCTYPE html><html><head>
+    <meta property="fc:frame" content="vNext" />
+    <meta property="og:image" content="${TokenMetaData[2].gatewayImage}"/>
+    <meta property="fc:frame:button:1" content="Already Minted" />
   </head></html>`);
   }
   //TODO: check for the active claim condition instead of defaulting to the 0th
