@@ -69,6 +69,12 @@ export async function generateMetadata(
   // const gasLimit = 200_000; //TODO: estimate gas
   const _metadata: Metadata = {
     title: 'Mint',
+    description: 'Mint',
+    openGraph: {
+      title: 'RedBluePill',
+      description: 'RedBluePill',
+      images: [TokenMetaData[0].gatewayImage],
+    },
     other: {
       ...frameMetadata,
       ...{

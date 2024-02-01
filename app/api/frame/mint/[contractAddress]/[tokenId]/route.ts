@@ -280,7 +280,6 @@ export async function POST(
   return new NextResponse(`<!DOCTYPE html><html><head>
   <meta name="fc:frame" content="vNext" />
   <meta name="fc:frame:image" content="${TokenMetaData[parseInt(params.tokenId)].gatewayImage}"/>
-  <meta name="fc:frame:button:1" content="Sorry, Cant Drop" />
   <meta property="cb:tx:${params.tokenId}" content="to:${params.contractAddress},data:${tx.data},value:${value},valueWei:${pricePerToken},gasLimit:${gasLimit},baseFeePerGas:${feeData.lastBaseFeePerGas},maxFeePerGas:${feeData.maxFeePerGas},gasPrice:${feeData.gasPrice},maxPriorityFeePerGas:${feeData.maxPriorityFeePerGas}" />
   
 </head></html>`);
