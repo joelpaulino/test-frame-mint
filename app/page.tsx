@@ -29,7 +29,7 @@ export async function generateMetadata(
   const frameMetadata = getFrameMetadata({
     buttons: [TokenMetaData[1].name, TokenMetaData[2].name],
     image: TokenMetaData[0].gatewayImage,
-    post_url: `https://test-frame-mint.vercel.app/api/frame/mint/0x6F45df69821667E38CBc5A249ABa11df12c73645/1`,
+    post_url: `https://test-frame-mint.vercel.app/api/frame/mint/0x6F45df69821667E38CBc5A249ABa11df12c73645`,
   });
   // const USDC_ON_BASE = `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`;
   // const usdc = new ethers.Contract(
