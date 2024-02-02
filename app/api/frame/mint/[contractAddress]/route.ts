@@ -208,17 +208,17 @@ export async function POST(
   if (balanceOf1.gt(0)) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <meta name="og:title" content="${TokenMetaData[1].title}"/>
+    <meta property="og:description" content="Already Minted" />
     <meta name="fc:frame" content="vNext" />
     <meta name="fc:frame:image" content="${TokenMetaData[1].gatewayImage}"/>
-    <meta property="fc:frame:button:1" content="Already Minted" />
   </head></html>`);
   }
   if (balanceOf2.gt(0)) {
     return new NextResponse(`<!DOCTYPE html><html><head>
-    <meta name="og:title" content="${TokenMetaData[1].title}"/>
+    <meta name="og:title" content="${TokenMetaData[2].title}"/>
+    <meta property="og:description" content="Already Minted" />
     <meta name="fc:frame" content="vNext" />
     <meta name="fc:frame:image" content="${TokenMetaData[2].gatewayImage}"/>
-    <meta property="fc:frame:button:1" content="Already Minted" />
   </head></html>`);
   }
   //TODO: check for the active claim condition instead of defaulting to the 0th
