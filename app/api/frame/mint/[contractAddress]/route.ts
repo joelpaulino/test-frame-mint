@@ -174,7 +174,7 @@ export async function POST(
   if (!userAddress) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
-    <meta property="og:image" content=${TokenMetaData[parseInt(tokenId)].gatewayImage}/>
+    <meta property="og:image" content=${TokenMetaData[tokenId + 1].gatewayImage}/>
     <meta property="fc:frame:button:1" content="No Address Found" />
   </head></html>`);
   }
@@ -251,7 +251,7 @@ export async function POST(
 
   return new NextResponse(`<!DOCTYPE html><html><head>
   <meta name="fc:frame" content="vNext" />
-  <meta name="fc:frame:image" content="${TokenMetaData[parseInt(tokenId)].gatewayImage}"/>
+  <meta name="fc:frame:image" content="${TokenMetaData[tokenId + 1].gatewayImage}"/>
   <meta property="cb:tx:${tokenId}" content="to:${params.contractAddress},data:${tx.data},value:${value},valueWei:${pricePerToken},gasLimit:${gasLimit},baseFeePerGas:${feeData.lastBaseFeePerGas},maxFeePerGas:${feeData.maxFeePerGas},gasPrice:${feeData.gasPrice},maxPriorityFeePerGas:${feeData.maxPriorityFeePerGas}" />
   
 </head></html>`);
@@ -293,12 +293,12 @@ body: {
   }
 }
 */
-async function getButtonIndex(body: any): Promise<string> {
+async function getButtonIndex(body: any): Promise<number> {
   if (body.hasOwnProperty('buttonIndex')) {
-    return body.buttonIndex as string;
+    return parseInt(body.buttonIndex as string) - 1;
   } else {
     const msg = await getFrameValidatedMessage(body);
-    return msg?.data?.frameActionBody?.buttonIndex.toString() as string;
+    return (msg?.data?.frameActionBody?.buttonIndex as number) - 1;
   }
 }
 /*
