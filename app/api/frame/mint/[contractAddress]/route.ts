@@ -255,6 +255,8 @@ export async function POST(
 
   return new NextResponse(`<!DOCTYPE html><html><head>
   <meta name="fc:frame" content="vNext" />
+  <meta name="og:title" content="${TokenMetaData[tokenId + 1].title}"/>
+  <meta name="og:description" content="${TokenMetaData[tokenId + 1].description}"/>
   <meta name="fc:frame:image" content="${TokenMetaData[tokenId + 1].gatewayImage}"/>
   <meta property="cb:tx:${tokenId}" content="to:${params.contractAddress},data:${tx.data},value:${value},valueWei:${pricePerToken},gasLimit:${gasLimit},baseFeePerGas:${feeData.lastBaseFeePerGas},maxFeePerGas:${feeData.maxFeePerGas},gasPrice:${feeData.gasPrice},maxPriorityFeePerGas:${feeData.maxPriorityFeePerGas}" />
   
