@@ -68,11 +68,11 @@ export async function generateMetadata(
   // const feeData = await signer.getFeeData();
   // const gasLimit = 200_000; //TODO: estimate gas
   const _metadata: Metadata = {
-    title: 'Super Bowl LVIII',
+    title: 'Choose your side and mint an NTF',
     description: 'Super Bowl LVIII',
     openGraph: {
-      title: 'Super Bowl LVIII',
-      description: 'Super Bowl LVIII',
+      title: TokenMetaData[0].title,
+      description:  TokenMetaData[0].description,
       images: [TokenMetaData[0].gatewayImage],
     },
     other: {

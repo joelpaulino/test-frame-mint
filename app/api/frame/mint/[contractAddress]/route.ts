@@ -174,6 +174,8 @@ export async function POST(
   if (!userAddress) {
     return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
+    <meta property="og:title" content="${TokenMetaData[tokenId + 1].title}" />
+    <meta property="og:description" content="${TokenMetaData[tokenId + 1].description}" />
     <meta property="og:image" content=${TokenMetaData[tokenId + 1].gatewayImage}/>
     <meta property="fc:frame:button:1" content="No Address Found" />
   </head></html>`);
@@ -205,6 +207,7 @@ export async function POST(
 
   if (balanceOf1.gt(0)) {
     return new NextResponse(`<!DOCTYPE html><html><head>
+    <meta name="og:title" content="${TokenMetaData[1].title}"/>
     <meta name="fc:frame" content="vNext" />
     <meta name="fc:frame:image" content="${TokenMetaData[1].gatewayImage}"/>
     <meta property="fc:frame:button:1" content="Already Minted" />
@@ -212,6 +215,7 @@ export async function POST(
   }
   if (balanceOf2.gt(0)) {
     return new NextResponse(`<!DOCTYPE html><html><head>
+    <meta name="og:title" content="${TokenMetaData[1].title}"/>
     <meta name="fc:frame" content="vNext" />
     <meta name="fc:frame:image" content="${TokenMetaData[2].gatewayImage}"/>
     <meta property="fc:frame:button:1" content="Already Minted" />
