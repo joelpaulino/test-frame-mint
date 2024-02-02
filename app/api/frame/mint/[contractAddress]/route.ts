@@ -199,7 +199,7 @@ export async function POST(
 
   const [balanceOf1, balanceOf2]: ethers.BigNumber[] = await nft.balanceOfBatch(
     [userAddress, userAddress],
-    [1, 2],
+    [0, 1],
   );
   console.log('balanceOf1:', balanceOf1, 'balanceOf2:', balanceOf2);
 
